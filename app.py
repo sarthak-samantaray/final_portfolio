@@ -27,32 +27,32 @@ app = Flask(__name__)
 
 # mongo_client = MongoClient(os.getenv('MONGO_URI'))
 
-app.config['MONGO_URI'] = os.getenv('MONGO_URI')
+app.config['MONGO_URI'] = os.getenv('MYMONGO_URI')
 mongo_client = MongoClient(app.config['MONGO_URI'], server_api=ServerApi('1'))
 # Create database instances
 mongo_blogs = mongo_client['blogs']
 mongo_projects = mongo_client['projects']
 mongo_skills = mongo_client['skills']
 
-app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER')  # Directory to save uploaded files
+app.config['UPLOAD_FOLDER'] = os.getenv('MYUPLOAD_FOLDER')  # Directory to save uploaded files
 
-app.secret_key = os.getenv('SECRET_KEY')  # Replace with a strong secret key
-app.config['SESSION_TYPE'] = os.getenv('SESSION_TYPE')
+app.secret_key = os.getenv('MYSECRET_KEY')  # Replace with a strong secret key
+app.config['SESSION_TYPE'] = os.getenv('MYSESSION_TYPE')
 
 # Twilio configuration
-TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')  # Replace with your Twilio account SID
-TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')  # Replace with your Twilio Auth Token
+TWILIO_ACCOUNT_SID = os.getenv('MYTWILIO_ACCOUNT_SID')  # Replace with your Twilio account SID
+TWILIO_AUTH_TOKEN = os.getenv('MYTWILIO_AUTH_TOKEN')  # Replace with your Twilio Auth Token
 TWILIO_PHONE_NUMBER = '+12294751444'  # Replace with your Twilio phone number
 
 # Admin credentials
-ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD') # Replace with a secure password
+ADMIN_PASSWORD = os.getenv('MYADMIN_PASSWORD') # Replace with a secure password
 
 
 # AWS S3 Configuration
-AWS_ACCESS_KEY = os.getenv("AWS_ACCESS_KEY")
-AWS_SECRET_KEY = os.getenv("AWS_SECRET_KEY")
-S3_BUCKET = os.getenv("S3_BUCKET")
-S3_REGION = os.getenv("S3_REGION")
+AWS_ACCESS_KEY = os.getenv("MYAWS_ACCESS_KEY")
+AWS_SECRET_KEY = os.getenv("MYAWS_SECRET_KEY")
+S3_BUCKET = os.getenv("MYS3_BUCKET")
+S3_REGION = os.getenv("MYS3_REGION")
 
 
 s3_client = boto3.client(
