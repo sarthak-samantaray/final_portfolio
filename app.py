@@ -17,7 +17,7 @@ import twilio
 from twilio.rest import Client
 import os
 from dotenv import load_dotenv
-
+import certifi
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import boto3
@@ -28,6 +28,8 @@ app = Flask(__name__)
 # mongo_client = MongoClient(os.getenv('MONGO_URI'))
 
 app.config['MONGO_URI'] = os.getenv('MYMONGO_URI')
+ca = certifi.where()
+mongo_client = MongoClient(app.config['MONGO_URI'], server_api=ServerApi('1'),tlsCAFile = ca)
 mongo_client = MongoClient(app.config['MONGO_URI'], server_api=ServerApi('1'))
 # Create database instances
 mongo_blogs = mongo_client['blogs']
