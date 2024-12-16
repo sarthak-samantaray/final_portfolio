@@ -671,5 +671,5 @@ def filter_blogs():
 
 
 
-if __name__ == "__main__":
-    app.run()
+# if __name__ == "__main__":
+#     app.run()
