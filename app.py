@@ -7,8 +7,9 @@ from flask import request
 import json
 from datetime import datetime
 from flask import abort
+from flask_cors import CORS
 
-
+import certifi
 from flask import Flask, render_template, request, redirect, session, flash
 from flask_mail import Mail, Message
 import random
@@ -24,11 +25,12 @@ import boto3
 load_dotenv()
 
 app = Flask(__name__)
-
+CORS(app)
 # mongo_client = MongoClient(os.getenv('MONGO_URI'))
 
 app.config['MONGO_URI'] = os.getenv('MYMONGO_URI')
-mongo_client = MongoClient(app.config['MONGO_URI'], server_api=ServerApi('1'))
+ca = certifi.where()
+mongo_client = MongoClient(app.config['MONGO_URI'], server_api=ServerApi('1'),tlsCAFile = ca)
 # Create database instances
 mongo_blogs = mongo_client['blogs']
 mongo_projects = mongo_client['projects']
