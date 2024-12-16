@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+  <meta charset="utf-8">
+  <title>Portfolio Template</title>
+
+  <!-- mobile responsive meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <!-- ** Plugins Needed for the Project ** -->
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="../static/plugins/bootstrap/bootstrap.min.css">
+  <!-- slick slider -->
+  <link rel="stylesheet" href="../static/plugins/slick/slick.css">
+  <!-- themefy-icon -->
+  <link rel="stylesheet" href="../static/plugins/themify-icons/themify-icons.css">
+
+  <!-- Main Stylesheet -->
+  <link href="../static/css/portfolio.css" rel="stylesheet">
+  
+  <!--Favicon-->
+  <link rel="shortcut icon" href="../static/images/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="../static/images/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lekton:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <p>HELLO</p>
+    <header class="navigation fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+          <!-- <a class="navbar-brand font-tertiary h3" href="index.html"><img src="  ../static/images/logo.png
+      " alt="Myself"></a> -->
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+            aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+      
+          <div class="collapse navbar-collapse text-center" id="navigation">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item active">
+                  <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('about') }}">About</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('blog') }}">Blog</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('portfolio') }}">Portfolio</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
+              </li>
+          </ul>
+          </div>
+        </nav>
+    </header>
+
+    <div class="filter-container">
+        <div class="filter-box">
+            <h3>Filter Projects</h3>
+            <form id="filter-form" method="GET" action="/filter_projects">
+                <div class="filter-row">
+                    <!-- Tags -->
+                    <div class="filter-column">
+                        <label for="tags" style="color:#fff">Tags:</label>
+                        <select id="tag-dropdown">
+                            <option value="">Select a tag</option>
+                            {% for tag in tags %}
+                                <option value="{{ tag }}">{{ tag }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            
+                <!-- Selected Tags -->
+                <div id="selected-tags" class="selected-tags-container">
+                    <span style="color : #666">Selected tags will appear here</span>
+                </div>
+                
+                <!-- Hidden Tags Input -->
+                <input type="hidden" name="tags" id="tags-input" />
+                
+                <!-- Apply Filter Button -->
+                <button type="submit" class="filter-button">Apply Filter</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tagDropdown = document.getElementById('tag-dropdown');
+            const selectedTagsContainer = document.getElementById('selected-tags');
+            const tagsInput = document.getElementById('tags-input');
+            let selectedTags = tagsInput.value ? tagsInput.value.split(',') : []; // Preserve tags on reload
+    
+            // Initialize selected tags on page load
+            updateSelectedTags();
+    
+            // Add event listener to the tag dropdown
+            tagDropdown.addEventListener('change', () => {
+                const selectedTag = tagDropdown.value;
+                if (selectedTag && !selectedTags.includes(selectedTag)) {
+                    selectedTags.push(selectedTag);
+                    updateSelectedTags();
+                }
+                tagDropdown.value = ""; // Reset dropdown
+            });
+    
+            // Function to update the selected tags container
+            function updateSelectedTags() {
+                selectedTagsContainer.innerHTML = ''; // Clear current tags
+    
+                if (selectedTags.length === 0) {
+                    // If no tags are selected, show the placeholder text
+                    const placeholderText = document.createElement('span');
+                    placeholderText.textContent = 'Selected tags will appear here';
+                    selectedTagsContainer.appendChild(placeholderText);
+                } else {
+                    // Display the selected tags
+                    selectedTags.forEach(tag => {
+                        const tagElement = document.createElement('span');
+                        tagElement.textContent = tag;
+                        tagElement.classList.add('selected-tag'); // Apply consistent styling
+                        // Dynamically set the color to #fff (white) for each tag
+                         tagElement.style.color = '#fff'; // This will ensure text color is white
+                        // Event listener to remove the tag when clicked
+                        tagElement.addEventListener('click', () => {
+                            selectedTags = selectedTags.filter(t => t !== tag);
+                            updateSelectedTags();
+                        });
+    
+                        selectedTagsContainer.appendChild(tagElement);
+                    });
+                }
+    
+                // Update hidden input field with the selected tags
+                tagsInput.value = selectedTags.join(',');
+            }
+        });
+    </script>
+      <div class="project-section">
+        <div class="projects-lists">
+            {% for project in projects %}
+            <div class="project-wrapper">
+                <div class="project-card">
+                    <img src="{{ project.image_url }}" class="project-image" alt="{{ project.title }}">
+                    <div class="project-content">
+                        <p class="project-description">{{ project.description }}</p>
+                        <a href="{{ project.github_link }}" class="project-link" target="_blank">View on GitHub</a>
+                    </div>
+                </div>
+                <!-- Move the title outside the project-card -->
+                <h3 class="project-title" style="color: #9a9a9a; margin-top: 10px; text-align: center;">{{ project.title }}</h3>
+            </div>
+            {% endfor %}
+        </div>
+      </div>
+        <!-- Footer HTML -->
+<footer class="custom-footer">
+    <hr class="footer-line">
+    <div class="footer-content">
+        <p><span class="footer-label">Currently developing from: </span><span class="footer-value">Hyderabad</span></p>
+        <p><span class="footer-label">Phone: </span><span class="footer-value">7008369110</span></p>
+        <p><span class="footer-label">Email: </span><span class="footer-value">sarthak.samantaray50@gmail.com</span></p>
+    </div>
+  </footer>
+ </body>
+ </html>

@@ -1,0 +1,332 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Lekton', monospace;
+  }
+  
+  body {
+    background-color: #1f1e23;
+    color: white;
+    padding: 2rem;
+    /* max-width: 1200px; */
+    margin: 0 auto;
+    background-image: url('/static/images/backgrounds/O5X8IV0.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+
+/* NAVBAR */
+.navigation {
+    padding: 0px 120px;
+    transition: .3s ease;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    background-color: #111111;
+    height: 150px;
+    border-bottom: 0.5px solid rgba(154, 154, 154, 0.5);
+  }
+  
+  .navigation.nav-bg {
+    background-color: #295f4e;
+    padding: 15px 100px;
+  }
+  
+  @media (max-width: 991px) {
+    .navigation.nav-bg {
+      padding: 15px 20px;
+    }
+  }
+  
+  @media (max-width: 991px) {
+    .navigation {
+      padding: 20px;
+      background: #295f4e;
+    }
+  }
+  
+  .navbar .nav-item .nav-link {
+    font-family: 'Lekton', monospace;
+    text-transform: uppercase;
+    padding: 15px;
+    transition: opacity 0.3s ease;
+    font-size: 1.5rem;
+    margin-top: 30px;
+  }
+  
+  .navbar .nav-item .nav-link:hover {
+    opacity: 0.7;
+  }
+  
+  .navbar .nav-item.active {
+    font-weight: bold;
+  }
+  
+  .navbar-dark .navbar-nav .nav-link {
+    color: #fff;
+  }
+  
+  /* NAVBAR ENDING */
+
+  /* My Intro */
+
+/* General container styling */
+.intro-container {
+    padding-left: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 150px;
+    margin-bottom: 50px;
+  }
+  
+  /* Intro text styling */
+  .intro-text {
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  .intro-text h2 {
+    color: #fff;
+    font-size: 2rem;
+  }
+  
+  .intro-text p {
+    font-size: 1rem;
+    color: #9A9A9A;
+    line-height: 1.6;
+  }
+  
+  /* Image styling */
+  .intro-image {
+    flex: 1;
+    min-width: 300px;
+    text-align: center;
+  }
+  
+  .intro-image img {
+    max-width: 50%;
+    height: auto;
+    border-radius: 50px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+
+  /* My Intro Ending */
+
+  /* Container for skills */
+/* Skills Container */
+.skills-container {
+    margin-bottom: 50px;
+    margin-top : 80px;
+    
+  }
+  
+  /* Skills Heading */
+  .skills-heading {
+    padding-left: 200px;
+    color: #fff;
+    font-size: 2rem;
+    margin-bottom: 15px;
+  }
+  
+  /* Skills List */
+  .skills-list {
+    padding-left: 200px;
+    display: grid;
+    max-width: 800px;
+    grid-template-columns: repeat(2, max-content); /* Two columns */
+    gap: 15px; /* Space between skill items */
+  }
+  
+  /* Individual Skill Item */
+  .skill-item {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Space between icon and text */
+    color: #9a9a9a;
+    font-size: 1.1rem;
+    padding-bottom: 5px;
+    transition: color 0.3s ease, border-color 0.3s ease;
+  }
+  .skill-item img{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+  }
+  .skill-item p{
+    margin-top: 10px;
+  }
+  
+  /* Hover Effect */
+  .skill-item:hover {
+    color: #051622;
+    border-color: #1ba098;
+  }
+  
+  .skill-item:hover .skill-icon {
+    color: #051622;
+  }
+
+
+  .soft-skills-container{
+    margin-bottom: 50px;
+    margin-top : 80px;
+    max-width: 900px;
+    padding-left: 200px;
+  }
+.soft-skills-container p{
+    color : #9A9A9A
+}
+
+.checklist-section{
+    padding-left: 200px;
+    margin-bottom: 50px;
+    margin-top : 80px;
+}
+.checklist-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 5px;
+    justify-items: center;
+    align-items: center;
+    max-width: 300px;
+}
+
+
+.checklist-item {
+    background-color: #202022;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 300px;
+}
+
+.checklist-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    background-color: #9a9a9a;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.checklist-item.checked input[type="checkbox"] {
+    background-color: #33e092;
+}
+
+.checklist-item.checked span {
+    color: #33e092;
+}
+
+.checklist-item input[type="checkbox"]:checked::before {
+    font-family: 'Font Awesome 6 Free';
+    color: black;
+    font-weight: 900;
+    text-align: center;
+}
+
+.checklist-item span {
+    font-size: 1.2rem;
+}
+
+.checklist-item.checked input[type="checkbox"] {
+    background-color: #33e092; /* Green background for checked items */
+}
+
+.checklist-item.checked span {
+    color: #33e092; /* Green text for checked items */
+}
+
+/* Add this to ensure the initial state reflects the checked items */
+.checklist-item input[type="checkbox"]:checked {
+    background-color: #33e092; /* Green background for checked items */
+}
+
+        /* Popup styles */
+        #popup {
+            background-image: url('/static/images/backgrounds/O5X8IV0.jpg');
+            display: none;
+            position: fixed;
+            left: -300px; /* Initially off the screen */
+            top: 50%;
+            transform: translateY(-50%);
+            /* background-color: #010101; */
+            background-image: url();
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            transition: left 0.5s ease-in-out;
+        }
+
+        #popup img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 10px;
+            transform: rotate(30deg);
+            border-radius: 50px;
+            
+        }
+
+        #popup p {
+            font-size: 0.8rem;
+            color: #fff;
+        }
+
+        /* Close button */
+        .close-btn {
+            background-color: #33e092;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .custom-footer {
+            padding: 20px;
+            margin-top: 40px;
+          }
+          
+          .footer-line {
+            border: none;
+            height: 1px;
+            background-color: #9a9a9a;
+            opacity: 0.5;
+            margin-bottom: 20px;
+            margin-top: 20px;
+          }
+          
+          .footer-content {
+            display: flex;
+            gap: 300px;
+            justify-content: center;
+          }
+          
+          .footer-label {
+            color: #fff;
+            font-weight: 500;
+          }
+          
+          .footer-value {
+            color: #9a9a9a;
+          }
+          
+          /* Optional: Add responsiveness */
+          @media (max-width: 768px) {
+            .footer-content {
+                gap: 8px;
+            }
+            
+            .custom-footer {
+                padding: 15px;
+            }
+          }

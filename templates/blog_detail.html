@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Portfolio Template</title>
+  
+    <!-- mobile responsive meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <!-- ** Plugins Needed for the Project ** -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="../static/plugins/bootstrap/bootstrap.min.css">
+  
+    <!-- Main Stylesheet -->
+    <link href="../static/css/single_blog_details.css" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/prism.js"></script>
+  
+  </head>
+<body>
+  <!-- NAV BAR SECTION -->
+  <header class="navigation fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <!-- <a class="navbar-brand font-tertiary h3" href="index.html"><img src="  ../static/images/logo.png
+  " alt="Myself"></a> -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+        aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <div class="collapse navbar-collapse text-center" id="navigation">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+              <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('about') }}">About</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('blog') }}">Blog</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('portfolio') }}">Portfolio</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
+          </li>
+      </ul>
+      </div>
+    </nav>
+  </header>
+    <div class="container">
+        <div class="main-content">
+            <article>
+                <header class="blog-header">
+                    <div class="blog-meta">
+                        <span>📅 {{ formatted_date }}</span>
+                        <span>⏱️ {{ post.reading_time }} min read</span>
+                    </div>
+                    <h1 class="blog-title">{{ post.title }}</h1>
+                    <p class="description">{{ post.description }}</p>
+                    {% if post.thumbnail %}
+                        <img src="/static/uploads/{{ post.thumbnail }}" alt="{{ post.title }}" class="thumbnail">
+                    {% endif %}
+                </header>
+
+                {% for item in content %}
+                    <div class="content-item {{ item.type }}">
+                        {% if item.type.startswith('heading_') %}
+                            <h{{ item.type[-1] }}>{{ item.content }}</h{{ item.type[-1] }}>
+                        {% elif item.type == 'code_block' %}
+                            <pre class="code_block"><code class="language-python">{{ item.content }}</code></pre>  <!-- Replace "language-python" with the appropriate language -->
+                        {% elif item.type == 'image' %}
+                            <div class="image-container">
+                                <img src="{{ item.content }}" alt="Blog content image">
+                            </div>
+                        {% else %}
+                            <p class="text">{{ item.content }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </article>
+        </div>
+
+        <div class="sidebar">
+            <h2 style="color : #9a9a9a; font-size: 0.8em;">Written by</h2>
+            <div class="author-info" style="display: flex; max-width: 200px;">
+                <img src="/static/images/job/me2.jfif" alt="" style="margin-right: 10px;">
+                <div style="display: flex; flex-direction: column;">
+                    <p style="color : #fff; margin: 0;">Sarthak Samantaray</p>
+                    <a href="https://www.linkedin.com/in/sarthaksamantaray/" style="color: #397ce9;">@sarthak</a>
+                </div>
+            </div>
+            <br><br>
+            <hr style="color : #9a9a9a; opacity: 0.2;">
+
+            <div class = "tags-container">
+                <h3 style="color : #fff">Tags</h3>
+                <div class="tags" st>
+                    {% for tag in post.tags %}
+                        <p class="tag">{{ tag }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer HTML -->
+    <footer class="custom-footer">
+        <hr class="footer-line">
+        <div class="footer-content">
+            <p><span class="footer-label">Currently developing from: </span><span class="footer-value">Hyderabad</span></p>
+            <p><span class="footer-label">Phone: </span><span class="footer-value">7008369110</span></p>
+            <p><span class="footer-label">Email: </span><span class="footer-value">sarthak.samantaray50@gmail.com</span></p>
+        </div>
+      </footer>
+</body>
+</html>

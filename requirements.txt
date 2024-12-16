@@ -1,0 +1,9 @@
+Flask
+Flask-PyMongo
+bson
+Werkzeug
+Flask-Mail
+twilio
+python-dotenv
+pymongo
+boto3

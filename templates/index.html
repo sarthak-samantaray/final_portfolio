@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Portfolio Template</title>
+  
+    <!-- mobile responsive meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <!-- ** Plugins Needed for the Project ** -->
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="../static/plugins/bootstrap/bootstrap.min.css">
+  
+    <!-- Main Stylesheet -->
+    <link href="../static/css/styles.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lekton:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+  
+  </head>
+<body>
+  <!-- NAV BAR SECTION -->
+  <header class="navigation fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <!-- <a class="navbar-brand font-tertiary h3" href="index.html"><img src="  ../static/images/logo.png
+  " alt="Myself"></a> -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+        aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <div class="collapse navbar-collapse text-center" id="navigation">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+              <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('about') }}">About</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('blog') }}">Blog</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('portfolio') }}">Portfolio</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('contact') }}">Contact</a>
+          </li>
+      </ul>
+      </div>
+    </nav>
+  </header>
+
+
+    <!-- HERO SECTION -->
+    <div class="hero">
+        <h1>AI|ML|GEN AI Developer</h1>
+        <p>I’m Sarthak Samantaray, an experienced and solution driven AI developer passionate about learning and building projects that is beneficial to developers and the world at large.</p>
+    </div>
+    
+    <!-- skills
+    <div class="skills-section">
+      <h2 class="skill-heading">Skills</h2>
+      <div class="skills-section-container">
+          <div class="row">
+              <div class="col-lg-12 text-center mb-5">
+              </div>
+              {% for skill in skill %}
+              <div class="col-lg-3 col-sm-6 mb-4">
+                  <div class="skill-box text-center">
+                      <div class="skill-circle">
+                          <svg class="skill-svg" viewBox="0 0 100 100">
+                              <circle class="bg-circle" cx="50" cy="50" r="45"></circle>
+                              <circle class="progress-circle" 
+                                    cx="50" cy="50" r="45" 
+                                    data-percentage="{{ skill.percentage }}" 
+                                    data-color="{{ skill.color }}">
+                              </circle>
+                          </svg>
+                          <div class="skill-content">
+                              <span class="percentage">{{ skill.percentage }}%</span>
+                              <span class="skill-name">{{ skill.name }}</span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              {% endfor %}
+          </div>
+      </div>
+    </div>    
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          // Function to check if element is in viewport
+          function isInViewport(element) {
+              const rect = element.getBoundingClientRect();
+              return (
+                  rect.top >= 0 &&
+                  rect.left >= 0 &&
+                  rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                  rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+              );
+          }
+
+          // Function to animate circles
+          function animateCircles() {
+              const circles = document.querySelectorAll('.progress-circle');
+
+              circles.forEach(circle => {
+                  if (isInViewport(circle) && !circle.classList.contains('animated')) {
+                      const percentage = circle.getAttribute('data-percentage');
+                      const color = circle.getAttribute('data-color');
+                      const circumference = 2 * Math.PI * 45; // 2 * π * radius (45)
+                      const offset = circumference - (percentage / 100 * circumference);
+
+                      // Set stroke properties dynamically
+                      circle.style.strokeDasharray = circumference;
+                      circle.style.strokeDashoffset = circumference; // Start from full circumference
+                      circle.style.stroke = color;
+
+                      // Animate to the calculated offset
+                      setTimeout(() => {
+                          circle.style.transition = 'stroke-dashoffset 1s ease-in-out'; // Add transition for smooth animation
+                          circle.style.strokeDashoffset = offset; // Animate to the offset
+                      }, 10); // Small delay to ensure the transition takes effect
+
+                      circle.classList.add('animated');
+                  }
+              });
+          }
+
+          // Initial animation
+          animateCircles();
+
+          // Animate on scroll
+          window.addEventListener('scroll', animateCircles);
+      });
+      </script> -->
+      <div class="project-section">
+        <h2>Projects</h2>
+        <div class="projects-lists">
+            {% for project in projects %}
+            <div class="project-wrapper">
+                <div class="project-card">
+                    <img src="{{ project.image_url }}" class="project-image" alt="{{ project.title }}">
+                    <div class="project-content">
+                        <p class="project-description">{{ project.description }}</p>
+                        <a href="{{ project.github_link }}" class="project-link" target="_blank">View on GitHub</a>
+                    </div>
+                </div>
+                <!-- Move the title outside the project-card -->
+                <h3 class="project-title" style="color: #9a9a9a; margin-top: 10px; text-align: center;">{{ project.title }}</h3>
+            </div>
+            {% endfor %}
+        </div>
+      </div>
+
+    
+
+    <div class="section">
+      <h2>Work Experience</h2>
+        <div class="experience-item">
+            <div class="experience-logo">
+                <img src="/static/images/job/wri.png" alt="Company 1 Logo">
+            </div>
+            <div class="experience-content">
+                <h3>Tech Company One</h3>
+                <div class="role">Senior AI Engineer</div>
+                <div class="date">2022 - Present</div>
+            </div>
+        </div>
+
+        <div class="experience-item">
+            <div class="experience-logo">
+                <img src="/static/images/job/jio.png" alt="Company 2 Logo">
+            </div>
+            <div class="experience-content">
+                <h3>Tech Company Two</h3>
+                <div class="role">Machine Learning Engineer</div>
+                <div class="date">2020 - 2022</div>
+            </div>
+        </div>
+
+        <div class="experience-item">
+            <div class="experience-logo">
+                <img src="/static/images/job/techolution.jfif" alt="Company 3 Logo">
+            </div>
+            <div class="experience-content">
+                <h3>Tech Company Three</h3>
+                <div class="role">AI Developer</div>
+                <div class="date">2018 - 2020</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer HTML -->
+<footer class="custom-footer">
+  <hr class="footer-line">
+  <div class="footer-content">
+      <p><span class="footer-label">Currently developing from: </span><span class="footer-value">Hyderabad</span></p>
+      <p><span class="footer-label">Phone: </span><span class="footer-value">7008369110</span></p>
+      <p><span class="footer-label">Email: </span><span class="footer-value">sarthak.samantaray50@gmail.com</span></p>
+  </div>
+</footer>
+</body>
+</html>

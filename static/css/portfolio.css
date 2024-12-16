@@ -1,0 +1,336 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Lekton', monospace;
+  }
+  
+  body {
+    background-color: #1f1e23;
+    color: white;
+    padding: 2rem;
+    /* max-width: 1200px; */
+    margin: 0 auto;
+    background-image: url('/static/images/backgrounds/O5X8IV0.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+
+/* NAVBAR */
+.navigation {
+    padding: 0px 120px;
+    transition: .3s ease;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    background-color: #111111;
+    height: 150px;
+    border-bottom: 0.5px solid rgba(154, 154, 154, 0.5);
+  }
+  
+  .navigation.nav-bg {
+    background-color: #295f4e;
+    padding: 15px 100px;
+  }
+  
+  @media (max-width: 991px) {
+    .navigation.nav-bg {
+      padding: 15px 20px;
+    }
+  }
+  
+  @media (max-width: 991px) {
+    .navigation {
+      padding: 20px;
+      background: #295f4e;
+    }
+  }
+  
+  .navbar .nav-item .nav-link {
+    font-family: 'Lekton', monospace;
+    text-transform: uppercase;
+    padding: 15px;
+    transition: opacity 0.3s ease;
+    font-size: 1.5rem;
+    margin-top: 30px;
+  }
+  
+  .navbar .nav-item .nav-link:hover {
+    opacity: 0.7;
+  }
+  
+  .navbar .nav-item.active {
+    font-weight: bold;
+  }
+  
+  .navbar-dark .navbar-nav .nav-link {
+    color: #fff;
+  }
+  
+  /* NAVBAR ENDING */
+
+.portfolio-container {
+    text-align: center;
+    padding: 20px;
+}
+
+.portfolio-heading h1 {
+    font-size: 36px;
+    color: #051622;
+}
+
+.pf-para p {
+    font-size: 18px;
+    color: #1ba098;
+    margin-bottom: 40px;
+}
+
+
+/* PROJECTS */
+
+.project-section{
+  margin-top: -50px;
+}
+.projects-lists {
+  padding-left: 200px;
+  margin-bottom: 300px;
+  margin-top : 80px;
+  display: flex;
+  flex-wrap: wrap;
+  
+  
+  /* justify-content: center; */
+  gap: 20px;
+
+}
+
+.project-card {
+  width: 300px;
+  height: 250px;  /* Fixed height for the card */
+  background-color: #9a9a9a;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+  opacity: 0.95;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.project-card:hover {
+  transform: scale(1.15); /* Slight enlargement of the card */
+}
+
+.project-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  text-align: center;
+  opacity: 0;  /* Initially hidden */
+  visibility: hidden;  /* Initially hidden */
+  transition: opacity 0.3s ease, visibility 0s ease 0.3s; /* Smooth transition */
+}
+
+.project-card:hover .project-content {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0s ease; /* Transition when hover */
+}
+
+.project-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #333;
+  position: relative;
+}
+
+.project-description {
+  font-size: 18px;
+  color: #111111;
+  margin-bottom: 20px;
+  font-style: bold;
+  opacity: 0;  /* Initially hidden */
+  transition: opacity 0.3s ease; /* Smooth opacity transition */
+}
+
+.project-link {
+  display: inline-block;
+  background-color: #1f1e23;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: opacity 0.3s ease;
+}
+.project-image{
+  width: 100%;
+  object-fit: fit;
+  border-radius: 8px;
+  transition: transform 0.3s ease; 
+}
+
+.project-card:hover .project-image{
+  visibility: hidden;
+}
+
+.project-card:hover .project-description {
+  opacity: 1; ; /* Make description visible on hover */
+}
+
+.project-card:hover .project-link {
+  opacity: 1;  /* Make GitHub link visible on hover */
+}
+
+.project-link:hover {
+  opacity: 1;  /* Change link color on hover */
+}
+.project-card:hover .project-title {
+  visibility: hidden;
+}
+.project-card:hover .project-link:hover {
+  color: #9A9A9A;
+}
+/* PROJECTS ENDING */
+
+/* Make the container center of the screen */
+.filter-container {
+  display: flex;
+  padding-left: 180px;
+  margin-top: 100px;
+}
+
+/* Style the filter box */
+.filter-box {
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 80%;
+  max-width: 600px;
+}
+/* Make the filter rows side by side */
+.filter-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+label {
+  font-size: 1rem;
+  color: #333;
+}
+
+select {
+  padding: 5px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.filter-button {
+  background-color: #1e1e1e;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+}
+
+.filter-button:hover {
+  background-color: #333;
+
+}
+
+/* Selected tags box styling */
+.selected-tags-container {
+  color: #666;
+  font-size: 1rem;
+  text-align: center;
+  margin: 0; /* Remove any margin */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  min-height: 40px;
+  background-color: #fff;
+}
+
+.selected-tags-container span {
+  font-size: 1rem;
+  text-align: center;
+  padding: 5px;
+}
+.selected-tag {
+  background-color: #666;  /* Change to a contrasting color */
+  color: #fff; /* Ensure the text is visible */
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+  .filter-box {
+      flex-direction: column;
+  }
+
+  .filter-row {
+      width: 100%;
+  }
+}
+.custom-footer {
+  padding: 20px;
+  margin-top: 40px;
+}
+
+.footer-line {
+  border: none;
+  height: 1px;
+  background-color: #9a9a9a;
+  opacity: 0.5;
+  margin-bottom: 20px;
+  margin-top: 50px;
+}
+
+.footer-content {
+  display: flex;
+  gap: 300px;
+  justify-content: center;
+}
+
+.footer-label {
+  color: #fff;
+  font-weight: 500;
+}
+
+.footer-value {
+  color: #9a9a9a;
+}
+
+/* Optional: Add responsiveness */
+@media (max-width: 768px) {
+  .footer-content {
+      gap: 8px;
+  }
+  
+  .custom-footer {
+      padding: 15px;
+  }
+}

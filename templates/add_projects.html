@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Skills</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Container */
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #051622;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Form Styles */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        label {
+            font-size: 1rem;
+            color: #333;
+        }
+
+        input[type="text"], 
+        input[type="number"], 
+        input[type="file"], 
+        button {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="text"], 
+        input[type="number"], 
+        input[type="file"] {
+            width: 100%;
+        }
+
+        button {
+            background-color: #1ba098;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #051622;
+        }
+
+        /* Back link */
+        a {
+            display: block;
+            text-align: center;
+            font-size: 1rem;
+            color: #1ba098;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Add a New Project</h1>
+        <form action="{{ url_for('add_projects') }}" method="POST" enctype="multipart/form-data">
+            <label for="project_name">Project Name</label>
+            <input type="text" id="project_name" name="project_name" required>
+        
+            <label for="description">Description</label>
+            <input type="text" id="description" name="description" required>
+        
+            <label for="icon">Upload Icon:</label>
+            <input type="file" id="icon" name="icon" accept="image/*" required>
+        
+            <label for="link">Link</label>
+            <input type="text" id="link" name="link" required>
+
+            <label for="tags">Tags</label>
+            <input type="text" id="tags" name="tags" required placeholder="Remember to add only 1 tag">
+        
+            <label for="show_on_main">
+                <input type="checkbox" id="show_on_main" name="show_on_main"> Show on Main Page
+            </label>
+        
+            <button type="submit">Add Project</button>
+        </form>
+
+        <a href="{{ url_for('about') }}">Back to About</a>
+    </div>
+
+</body>
+</html>
