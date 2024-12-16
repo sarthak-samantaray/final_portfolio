@@ -66,7 +66,7 @@
                     <h1 class="blog-title">{{ post.title }}</h1>
                     <p class="description">{{ post.description }}</p>
                     {% if post.thumbnail %}
-                        <img src="/static/uploads/{{ post.thumbnail }}" alt="{{ post.title }}" class="thumbnail">
+                        <img src="{{ post.thumbnail }}" alt="{{ post.title }}" class="thumbnail">
                     {% endif %}
                 </header>
 

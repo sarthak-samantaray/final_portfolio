@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, url_for
-from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
 from bson import json_util
@@ -22,6 +21,8 @@ import certifi
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import boto3
+from ssl import CERT_NONE
+import ssl
 load_dotenv()
 
 app = Flask(__name__)
@@ -29,8 +30,15 @@ CORS(app)
 # mongo_client = MongoClient(os.getenv('MONGO_URI'))
 
 app.config['MONGO_URI'] = os.getenv('MYMONGO_URI')
-ca = certifi.where()
-mongo_client = MongoClient(app.config['MONGO_URI'], server_api=ServerApi('1'),tlsCAFile = ca)
+# ssl_context = ssl.create_default_context()
+# ssl_context.check_hostname = False
+mongo_client = MongoClient(
+                        app.config['MONGO_URI'], 
+                        server_api=ServerApi('1'),
+                        tls=True,
+                        tlsAllowInvalidCertificates=True,
+                        # ssl_context=ssl_context
+                        )
 # Create database instances
 mongo_blogs = mongo_client['blogs']
 mongo_projects = mongo_client['projects']
@@ -64,11 +72,24 @@ s3_client = boto3.client(
     region_name=S3_REGION
 )
 
-try:
-    mongo = PyMongo(app)
-except Exception as e:
-    print(f"Error connecting to MongoDB: {e}")
-    mongo = None  # Ensure mongo is None if connection fails
+
+# try:
+#     mongo_client = MongoClient(
+#         os.getenv('MYMONGO_URI'),
+#         server_api=ServerApi('1'),
+#     )
+#     # Test the connection
+#     mongo_client.admin.command('ping')
+    
+#     # Create database instances
+#     mongo_blogs = mongo_client['blogs']
+#     mongo_projects = mongo_client['projects']
+#     mongo_skills = mongo_client['skills']
+    
+#     print("Successfully connected to MongoDB!")
+# except Exception as e:
+#     print(f"Error connecting to MongoDB: {e}")
+#     raise e
 
 # Twilio client setup
 twilio_client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
@@ -146,8 +167,6 @@ def home():
 # Blog Listing Page
 @app.route("/blog")
 def blog():
-    if mongo is None:
-        return "Database connection error", 500  # Handle connection error
     blogs = mongo_blogs.blogs_lists.find()
     blogs_list = list(blogs)
 
@@ -160,30 +179,26 @@ import markdown
 from markupsafe import Markup
 @app.route("/blog/<blog_id>")
 def blog_detail(blog_id):
-        # Ensure MongoDB is connected
-        if mongo is None:
-            return "Database connection error", 500
+    # Fetch a single blog by ID
+    blog_post = mongo_blogs.blogs_lists.find_one({"_id": ObjectId(blog_id)})
+    # Check if the blog exists
+    if not blog_post:
+        return "Blog not found", 404
 
-        # Fetch a single blog by ID
-        blog_post = mongo_blogs.blogs_lists.find_one({"_id": ObjectId(blog_id)})
-        # Check if the blog exists
-        if not blog_post:
-            return "Blog not found", 404
+    # Now try to fetch the specific blog
+    if blog_post:
+        # Parse the markdown content
+        parsed_content = parse_markdown(blog_post['content'])
+        # Format the date
+        formatted_date = blog_post['edit_date'].strftime('%B %d, %Y') if isinstance(blog_post['edit_date'], datetime) else blog_post['edit_date']
 
-        # Now try to fetch the specific blog
-        if blog_post:
-            # Parse the markdown content
-            parsed_content = parse_markdown(blog_post['content'])
-            # Format the date
-            formatted_date = blog_post['edit_date'].strftime('%B %d, %Y') if isinstance(blog_post['edit_date'], datetime) else blog_post['edit_date']
-
-            return render_template('blog_detail.html', 
-                                post=blog_post,
-                                content=parsed_content,
-                                formatted_date=formatted_date)
-        else:
-            all_ids = [str(post['_id']) for post in mongo_blogs.blogs_lists.find({}, {'_id': 1})]
-            return f"Blog post with ID '675e76aa2f1568af4d8a10c2' not found. Available blog IDs: {all_ids}", 404
+        return render_template('blog_detail.html', 
+                            post=blog_post,
+                            content=parsed_content,
+                            formatted_date=formatted_date)
+    else:
+        all_ids = [str(post['_id']) for post in mongo_blogs.blogs_lists.find({}, {'_id': 1})]
+        return f"Blog post with ID '675e76aa2f1568af4d8a10c2' not found. Available blog IDs: {all_ids}", 404
 
 
 
@@ -213,8 +228,6 @@ def fiter_projects():
 
 @app.route('/portfolio')
 def portfolio():
-    if mongo is None:
-        return "Database connection error", 500  # Handle connection error
     projects = mongo_projects.projects_lists.find()
     projects = list(projects)
 
@@ -351,8 +364,6 @@ def update_blog(blog_id):
 
 @app.route('/edit_blogs')
 def edit_blogs():
-    if mongo is None:
-        return "Database connection error", 500  # Handle connection error
     blogs = mongo_blogs.blogs_lists.find()  # Corrected `mongo_blogs`
     blogs_list = list(blogs)
 
@@ -368,8 +379,6 @@ def edit_blogs():
 # Delete Blog Route
 @app.route("/delete/<blog_id>", methods=["POST"])
 def delete_blog(blog_id):
-    if mongo is None:
-        return "Database connection error", 500  # Handle connection error
     mongo_blogs.blogs_lists.delete_one({"_id": ObjectId(blog_id)})
     return redirect(url_for("edit_blogs"))
 
