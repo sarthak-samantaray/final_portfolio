@@ -7,5 +7,4 @@ twilio
 python-dotenv
 pymongo
 boto3
-MarkSafe
 Markdown
