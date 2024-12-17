@@ -1,28 +1,27 @@
-from flask import Flask, render_template, request, redirect, url_for
-from bson.objectid import ObjectId
-from werkzeug.utils import secure_filename
-from bson import json_util
-from flask import request
-import json
+from flask import Flask, render_template, request, redirect, session, flash , url_for, abort
 from datetime import datetime
-from flask import abort
 from flask_cors import CORS
-
-import certifi
-from flask import Flask, render_template, request, redirect, session, flash
-from flask_mail import Mail, Message
 import random
 import string
-import twilio
 from twilio.rest import Client
+
 import os
 from dotenv import load_dotenv
-import certifi
+
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+
 import boto3
-from ssl import CERT_NONE
-import ssl
+from botocore.exceptions import NoCredentialsError
+
+from flask import jsonify
+from flask import request, jsonify
+from bson import ObjectId
+from werkzeug.utils import secure_filename
+
+import uuid
+import re
+
 load_dotenv()
 
 app = Flask(__name__)
@@ -155,7 +154,7 @@ def admin_dashboard():
 def home():
     try:
         blogs = mongo_blogs.blogs_lists.find()
-        projects = mongo_projects.projects_lists.find({'show_on_main': True})  # Filter projects
+        projects = list(mongo_projects.projects_lists.find({'show_on_main': True}))[::-1] # Filter projects
         skills = mongo_skills.skills_details.find()
 
     except Exception as e:
@@ -229,7 +228,7 @@ def fiter_projects():
 @app.route('/portfolio')
 def portfolio():
     projects = mongo_projects.projects_lists.find()
-    projects = list(projects)
+    projects = list(projects)[::-1]
 
     # Get all unique tags for the filter dropdown
     tags = mongo_projects.projects_lists.distinct('tags')
@@ -247,7 +246,7 @@ def about():
     return render_template('about.html',skills=skills) 
 
 
-from botocore.exceptions import NoCredentialsError
+
 
 @app.route("/save_updated_blog/<blog_id>")
 def save_updated_blog(blog_id):
@@ -484,13 +483,11 @@ def add_skills():
 
 
 ########################################### BLOG OPERATION #####################################
-import json
 # Add Blog Page
 # Ensure the upload folder exists
-import os
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-import re
+
 
 def parse_markdown(content):
         # Define patterns for each Markdown element
@@ -583,12 +580,7 @@ def upload():
             return {'url': url_for('static', filename=f'uploads/{image.filename}')}, 200
     return {'error': 'No image uploaded'}, 400
 
-from flask import jsonify
-from flask import request, jsonify
-import os
-from bson import ObjectId
-from werkzeug.utils import secure_filename
-import uuid
+
 @app.route('/save', methods=['POST'])
 def save():
     try:
@@ -679,8 +671,43 @@ def filter_blogs():
 
     except Exception as e:
         return jsonify({'message': f'Error: {str(e)}'}), 500
+    
+
+############################################### REVIEW ####################################################################
+
+# Route for displaying comments
+@app.route('/review', methods=['GET', 'POST'])
+def review():
+    try:
+        if request.method == 'POST':
+            # Get data from form submission
+            name = request.form.get('name')
+            comment = request.form.get('comment')
+            
+            # Simple validation
+            if not name or not comment:
+                return "Name and comment are required", 400
+            
+            # Create comment document
+            comment_doc = {
+                'name': name,
+                'comment': comment,
+                'timestamp': datetime.now()
+            }
+            
+            # Insert the comment into MongoDB
+            mongo_blogs.comments.insert_one(comment_doc)
+            return redirect(url_for('review'))  # Reload the page after inserting the comment
+        
+        # If GET request, retrieve all comments sorted by timestamp
+        comments = list(mongo_blogs.comments.find().sort('timestamp', -1))
+        return render_template('review.html', comments=comments)
+    
+    except Exception as e:
+        print(f"Error processing request: {e}")
+        return "Error processing request", 500
 
 
 
-# if __name__ == "__main__":
-#     app.run()
+if __name__ == "__main__":
+    app.run(debug=True)

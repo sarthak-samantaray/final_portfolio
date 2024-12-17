@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Comments Section</title>
+    
+    <!-- Mobile Responsive Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../static/plugins/bootstrap/bootstrap.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Lekton:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    
+    <style>
+        body {
+            background-color: #1f1e23;
+            color: white;
+            padding: 2rem;
+            font-family: 'Lekton', sans-serif;
+            margin: 0 auto;
+            background-image: url('/static/images/backgrounds/O5X8IV0.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        h2 {
+            text-align: center;
+            margin-top: 10rem;
+            margin-bottom: 2rem;
+        }
+        .comment-box {
+            border: 1px solid #444;
+            margin: 20px auto;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #2b2a30;
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+        }
+        .comment-meta {
+            color: #aaa;
+            font-size: 0.9em;
+        }
+        .comment-form {
+            margin-top: 350px;
+            background-color: #2b2a30;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            padding : 20px;
+            margin-left: 325px;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        /* NAVBAR */
+        .navigation {
+        padding: 0px 120px;
+        transition: .3s ease;
+        position: fixed;
+        width: 100%;
+        z-index: 1000;
+        background-color: #111111;
+        height: 150px;
+        border-bottom: 0.5px solid rgba(154, 154, 154, 0.5);
+        }
+
+        .navigation.nav-bg {
+        background-color: #295f4e;
+        padding: 15px 100px;
+        }
+
+        @media (max-width: 991px) {
+        .navigation.nav-bg {
+            padding: 15px 20px;
+        }
+        }
+
+        @media (max-width: 991px) {
+        .navigation {
+            padding: 20px;
+            background: #295f4e;
+        }
+        }
+
+        .navbar .nav-item .nav-link {
+        font-family: 'Lekton', monospace;
+        text-transform: uppercase;
+        padding: 15px;
+        transition: opacity 0.3s ease;
+        font-size: 1.5rem;
+        margin-top: 30px;
+        }
+
+        .navbar .nav-item .nav-link:hover {
+        opacity: 0.7;
+        }
+
+        .navbar .nav-item.active {
+        font-weight: bold;
+        }
+
+        .navbar-dark .navbar-nav .nav-link {
+        color: #fff;
+        }
+
+        /* NAVBAR ENDING */
+
+        .custom-footer {
+            padding: 20px;
+            margin-top: 40px;
+            }
+
+        .footer-line {
+        border: none;
+        height: 1px;
+        background-color: #9a9a9a;
+        opacity: 0.5;
+        margin-bottom: 20px;
+        }
+
+        .footer-content {
+        display: flex;
+        gap: 300px;
+        justify-content: center;
+        }
+
+        .footer-label {
+        color: #fff;
+        font-weight: 500;
+        }
+
+        .footer-value {
+        color: #9a9a9a;
+        }
+    </style>
+</head>
+<body>
+      <!-- NAV BAR SECTION -->
+  <header class="navigation fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <!-- <a class="navbar-brand font-tertiary h3" href="index.html"><img src="  ../static/images/logo.png
+  " alt="Myself"></a> -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+        aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <div class="collapse navbar-collapse text-center" id="navigation">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+              <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('about') }}">About</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('blog') }}">Blog</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('portfolio') }}">Portfolio</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('review') }}">Review</a>
+          </li>
+      </ul>
+      </div>
+    </nav>
+  </header>
+    <!-- Title -->
+    <h2>Comments</h2>
+    
+    <!-- Comments Section -->
+    <div class="container">
+        {% if comments %}
+            {% for comment in comments %}
+            <div class="comment-box">
+                <strong>{{ comment.name }}</strong>
+                <p>{{ comment.comment }}</p>
+                <div class="comment-meta">
+                    Posted on: {{ comment.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-center">No comments yet. Be the first to comment!</p>
+        {% endif %}
+    </div>
+
+    <!-- Add spacing between comments and form -->
+    <div style="margin-top: 80px;"></div>
+
+    <!-- Comment Form -->
+    <div class="comment-form">
+        <h3 class="text-center mb-4">Add a Comment</h3>
+        <form action="{{ url_for('review') }}" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+                <label for="comment">Comment:</label>
+                <textarea class="form-control" id="comment" name="comment" rows="4" placeholder="Write your comment here" required></textarea>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary">Submit Comment</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS and Dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Footer HTML -->
+    <footer class="custom-footer">
+        <hr class="footer-line">
+        <div class="footer-content">
+            <p><span class="footer-label">Currently developing from: </span><span class="footer-value">Hyderabad</span></p>
+            <p><span class="footer-label">Phone: </span><span class="footer-value">7008369110</span></p>
+            <p><span class="footer-label">Email: </span><span class="footer-value">sarthak.samantaray50@gmail.com</span></p>
+        </div>
+      </footer>
+</body>
+</html>
