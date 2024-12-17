@@ -45,7 +45,7 @@
                 <div class="form-group">
                     <label for="thumbnail">Thumbnail</label>
                     <input type="file" class="form-control" id="thumbnail" name="thumbnail">
-                    <img src="/static/uploads/{{ blog.thumbnail }}" alt="Current thumbnail" class="preview-image">
+                    <img src="{{ current_thumbnail }}" alt="Current thumbnail" class="preview-image">
                     <input type="hidden" name="current_thumbnail" value="{{ blog.thumbnail }}">
                 </div>
 
