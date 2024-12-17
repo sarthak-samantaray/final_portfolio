@@ -322,6 +322,8 @@ def get_blog_by_id(blog_id):
 @app.route("/update_blog/<blog_id>", methods=["GET", "POST"])
 def update_blog(blog_id):
     blog = get_blog_by_id(blog_id)  # Retrieve the blog post
+    result = mongo_blogs.blogs_lists.find_one({'_id': ObjectId(blog_id)})
+    current_thumbnail = result['thumbnail']
     if request.method == "POST":
         # Handle the form submission
         updated_data = {
@@ -331,7 +333,7 @@ def update_blog(blog_id):
             "content": request.form["content"],
             "reading_time": int(request.form["reading_time"]),
             "edit_date": request.form["edit_date"],
-            "thumbnail" : ""
+            "thumbnail" : current_thumbnail
         }
         thumbnail = request.files.get('thumbnail')
         if thumbnail:
@@ -359,7 +361,7 @@ def update_blog(blog_id):
 
         mongo_blogs.blogs_lists.update_one({"_id": ObjectId(blog_id)}, {"$set": updated_data})
         return redirect(url_for("edit_blogs"))
-    return render_template("update_blog.html", blog=blog)
+    return render_template("update_blog.html", blog=blog,current_thumbnail=current_thumbnail)
 
 @app.route('/edit_blogs')
 def edit_blogs():
@@ -490,14 +492,14 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 
 def parse_markdown(content):
-        # Define patterns for each Markdown element
+    # Define patterns for each Markdown element
     patterns = {
         "heading_1": r"^#\s+(.*)$",          # Matches Heading 1 (# Heading)
         "heading_2": r"^##\s+(.*)$",         # Matches Heading 2 (## Heading)
         "heading_3": r"^###\s+(.*)$",        # Matches Heading 3 (### Heading)
         "heading_4": r"^####\s+(.*)$",       # Matches Heading 4 (#### Heading)
         "code_block": r"```([\s\S]*?)```",   # Matches code blocks
-        "image": r"!\[.*?\]\((.*?)\)",       # Matches Markdown images
+        "image": r'<img>(.*?)</img>',  # Matches image tags
         "text": r"^[^#!\n`][^\n]*$"          # Matches normal text
     }
     
@@ -549,6 +551,7 @@ def parse_markdown(content):
         else:
             # Check for images
             image_match = re.search(patterns["image"], line)
+            print("image match",image_match)
             if image_match:
                 results.append({
                     'type': 'image',
@@ -560,6 +563,7 @@ def parse_markdown(content):
                     'type': 'text',
                     'content': line
                 })
+        
         i += 1
     
     return results
@@ -706,6 +710,35 @@ def review():
     except Exception as e:
         print(f"Error processing request: {e}")
         return "Error processing request", 500
+    
+
+#################################################### UPLOAD TO S3 BUCKET ################################################
+@app.route('/upload_image', methods=['GET', 'POST'])
+def upload_image():
+    if not session.get('otp_verified'):
+        flash("Unauthorized access. Please log in.", "danger")
+        return redirect('/admin')
+    elif request.method == 'POST':
+        if 'image' not in request.files:
+            return 'No file part', 400
+        file = request.files['image']
+        
+        if file.filename == '':
+            return 'No selected file', 400
+        
+        try:
+            # Upload the image to S3
+            filename = secure_filename(file.filename)
+            s3_key = f"uploads/{filename}"
+            s3_client.upload_fileobj(file, S3_BUCKET, s3_key)
+            file_url = f"https://{S3_BUCKET}.s3.{S3_REGION}.amazonaws.com/{s3_key}"
+            
+            return render_template('upload_image.html', url=file_url)  # Render HTML with URL
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+    # Render the upload image form when the user accesses the page via GET
+    return render_template('upload_image.html')
 
 
 
