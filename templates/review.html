@@ -30,11 +30,9 @@
         h2 {
             text-align: center;
             margin-top: 10rem;
-            margin-bottom: 2rem;
         }
         .comment-box {
             border: 1px solid #444;
-            margin: 20px auto;
             padding: 15px;
             border-radius: 10px;
             background-color: #2b2a30;
@@ -46,14 +44,23 @@
             color: #aaa;
             font-size: 0.9em;
         }
-        .comment-form {
-            margin-top: 350px;
+        .container-comments {
+            margin: auto;
+            margin-top: 20px;
             background-color: #2b2a30;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             max-width: 800px;
             padding : 20px;
-            margin-left: 325px;
+        }
+        .container-addcomments {
+            margin: auto;
+            margin-top: 500px;
+            background-color: #2b2a30;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            padding : 20px;
         }
         .btn-primary {
             background-color: #007bff;
@@ -182,7 +189,7 @@
     <h2>Comments</h2>
     
     <!-- Comments Section -->
-    <div class="container">
+    <div class="container-comments">
         {% if comments %}
             {% for comment in comments %}
             <div class="comment-box">
@@ -197,26 +204,22 @@
             <p class="text-center">No comments yet. Be the first to comment!</p>
         {% endif %}
     </div>
-
-    <!-- Add spacing between comments and form -->
-    <div style="margin-top: 80px;"></div>
-
     <!-- Comment Form -->
-    <div class="comment-form">
-        <h3 class="text-center mb-4">Add a Comment</h3>
-        <form action="{{ url_for('review') }}" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
-            </div>
-            <div class="form-group">
-                <label for="comment">Comment:</label>
-                <textarea class="form-control" id="comment" name="comment" rows="4" placeholder="Write your comment here" required></textarea>
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">Submit Comment</button>
-            </div>
-        </form>
+    <div class="container-addcomments">
+            <h3 class="text-center mb-4">Add a Comment</h3>
+            <form action="{{ url_for('review') }}" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="comment">Comment:</label>
+                    <textarea class="form-control" id="comment" name="comment" rows="4" placeholder="Write your comment here" required></textarea>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Submit Comment</button>
+                </div>
+            </form>
     </div>
 
     <!-- Bootstrap JS and Dependencies -->
