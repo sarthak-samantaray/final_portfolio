@@ -215,7 +215,7 @@ def fiter_projects():
             query['tags'] = {'$in': tag_list}  # Match blogs with any of the selected tags
 
         # Fetch filtered blogs from the database
-        projects = list(mongo_projects.projects_lists.find(query))
+        projects = list(mongo_projects.projects_lists.find(query))[::-1]
 
         # Get all unique tags for the filter dropdown
         tags = mongo_projects.projects_lists.distinct('tags')
