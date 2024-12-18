@@ -104,6 +104,7 @@
     flex: 1;
     min-width: 300px;
     text-align: center;
+    margin-bottom: 2rem;
   }
   
   .intro-image img {
@@ -330,3 +331,35 @@
                 padding: 15px;
             }
           }
+
+          .resume-download-container {
+            text-align: center;
+            margin: 1rem auto;
+            max-width: 100%;
+        }
+        
+        .resume-download-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: #202022;  /* Match your checklist item background */
+            color: #9A9A9A;  /* Match your text color scheme */
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid #202022;
+            border-color: #33e092;
+        }
+        
+        .resume-download-btn:hover {
+            background-color: transparent;
+            border-color: #33e092;
+            color: #33e092;
+        }
+        
+        .resume-download-btn i {
+            font-size: 1.2rem;
+        }

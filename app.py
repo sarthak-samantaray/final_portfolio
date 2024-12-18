@@ -246,69 +246,6 @@ def about():
     return render_template('about.html',skills=skills) 
 
 
-
-
-@app.route("/save_updated_blog/<blog_id>")
-def save_updated_blog(blog_id):
-    try:
-        # Get form data
-        title = request.form.get('title')
-        description = request.form.get('description')
-        tags = request.form.get('tags').split(',')
-        tags = [tag.strip() for tag in tags]  # Clean up whitespace
-        reading_time = request.form.get('reading_time')
-        content = request.form.get('content')
-        edit_date = request.form.get('edit_date')
-
-        # Handle thumbnail update
-        # Handling the thumbnail upload
-        thumbnail = request.files.get('thumbnail')
-        if thumbnail:
-            original_filename = secure_filename(thumbnail.filename)
-            unique_filename = f"{uuid.uuid4().hex}_{original_filename}"  # Unique file name
-            s3_key = f"uploads/{unique_filename}"  # Path in the S3 bucket
-            
-            # Upload the file to S3
-            try:
-                s3_client.upload_fileobj(
-                    thumbnail,
-                    S3_BUCKET,
-                    s3_key,
-                    ExtraArgs={'ContentType': thumbnail.content_type}  # Ensure public access
-                )
-                
-                # Generate the S3 URL for the uploaded file
-                thumbnail_url = f"https://{S3_BUCKET}.s3.{S3_REGION}.amazonaws.com/{s3_key}"
-            except Exception as e:
-                print(f"Error uploading file to S3: {str(e)}")
-                thumbnail_url = None
-        else:
-            thumbnail_url = request.form.get('current_thumbnail')
-
-        # Update document in MongoDB
-        update_data = {
-            "title": title,
-            "description": description,
-            "tags": tags,
-            "reading_time": reading_time,
-            "content": content,
-            "edit_date": edit_date,
-            "thumbnail": thumbnail_url
-        }
-
-        mongo_blogs.blogs_lists.update_one(
-            {"_id": ObjectId(blog_id)},
-            {"$set": update_data}
-        )
-
-        return redirect(url_for('edit_blogs'))
-
-    except Exception as e:
-        print(f"Error updating blog: {e}")
-
-
-
-
 # Utility function to fetch a blog by ID
 def get_blog_by_id(blog_id):
     try:
@@ -324,7 +261,10 @@ def update_blog(blog_id):
     blog = get_blog_by_id(blog_id)  # Retrieve the blog post
     result = mongo_blogs.blogs_lists.find_one({'_id': ObjectId(blog_id)})
     current_thumbnail = result['thumbnail']
-    if request.method == "POST":
+    if not session.get('otp_verified'):
+        flash("Unauthorized access. Please log in.", "danger")
+        return redirect('/admin')
+    elif request.method == "POST":
         # Handle the form submission
         updated_data = {
             "title": request.form["title"],
@@ -365,6 +305,9 @@ def update_blog(blog_id):
 
 @app.route('/edit_blogs')
 def edit_blogs():
+    if not session.get('otp_verified'):
+        flash("Unauthorized access. Please log in.", "danger")
+        return redirect('/admin')
     blogs = mongo_blogs.blogs_lists.find()  # Corrected `mongo_blogs`
     blogs_list = list(blogs)
 
@@ -386,7 +329,10 @@ def delete_blog(blog_id):
 ################################# Project Operation #########################################
 @app.route("/add_projects", methods=["GET", "POST"])
 def add_projects():
-    if request.method == "POST":
+    if not session.get('otp_verified'):
+        flash("Unauthorized access. Please log in.", "danger")
+        return redirect('/admin')
+    elif request.method == "POST":
         project_name = request.form.get("project_name")
         description = request.form.get("description")
         image = request.form.get("icon")
@@ -438,7 +384,10 @@ def add_projects():
 
 @app.route("/add_skills", methods=["GET", "POST"])
 def add_skills():
-    if request.method == "POST":
+    if not session.get('otp_verified'):
+        flash("Unauthorized access. Please log in.", "danger")
+        return redirect('/admin')
+    elif request.method == "POST":
         skill_name = request.form.get("skill_name")
         percentage = request.form.get("percentage")
         
@@ -499,7 +448,7 @@ def parse_markdown(content):
         "heading_3": r"^###\s+(.*)$",        # Matches Heading 3 (### Heading)
         "heading_4": r"^####\s+(.*)$",       # Matches Heading 4 (#### Heading)
         "code_block": r"```([\s\S]*?)```",   # Matches code blocks
-        "image": r'<img>(.*?)</img>',  # Matches image tags
+        "image": r'<img(?:\s+src\s*=\s*".*?")?>(.*?)</img>',  # Matches image tags
         "text": r"^[^#!\n`][^\n]*$"          # Matches normal text
     }
     
@@ -571,6 +520,9 @@ def parse_markdown(content):
 
 @app.route("/add", methods=["GET", "POST"])
 def add_blog():
+    if not session.get('otp_verified'):
+        flash("Unauthorized access. Please log in.", "danger")
+        return redirect('/admin')
     return render_template("add_blog.html")
 
 
@@ -713,8 +665,8 @@ def review():
     
 
 #################################################### UPLOAD TO S3 BUCKET ################################################
-@app.route('/upload_image', methods=['GET', 'POST'])
-def upload_image():
+@app.route('/upload_file', methods=['GET', 'POST'])
+def upload_file():
     if not session.get('otp_verified'):
         flash("Unauthorized access. Please log in.", "danger")
         return redirect('/admin')
