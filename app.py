@@ -340,6 +340,10 @@ def add_projects():
         show_on_main = 'show_on_main' in request.form
         tags = request.form.get("tags")
         
+        if tags:
+            tags = tags.split(',')  # Convert tags into a list
+        else:
+            tags = []
         # Handle file upload for the skill icon
         if 'icon' not in request.files:
             return "No file part", 400
