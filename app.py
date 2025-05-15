@@ -51,7 +51,8 @@ app.config['SESSION_TYPE'] = os.getenv('MYSESSION_TYPE')
 # Twilio configuration
 TWILIO_ACCOUNT_SID = os.getenv('MYTWILIO_ACCOUNT_SID')  # Replace with your Twilio account SID
 TWILIO_AUTH_TOKEN = os.getenv('MYTWILIO_AUTH_TOKEN')  # Replace with your Twilio Auth Token
-TWILIO_PHONE_NUMBER = '+12294751444'  # Replace with your Twilio phone number
+# TWILIO_PHONE_NUMBER = '+12294751444'  # Replace with your Twilio phone number
+TWILIO_PHONE_NUMBER = '+16206590328'
 
 # Admin credentials
 ADMIN_PASSWORD = os.getenv('MYADMIN_PASSWORD') # Replace with a secure password
